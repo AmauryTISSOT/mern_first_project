@@ -43,7 +43,6 @@ const createWorkout = async (req, res) => {
 };
 
 // delete workout
-//FIXME: work but generate an error
 const deleteWorkout = async (req, res) => {
     const { id } = req.params;
 
@@ -53,15 +52,14 @@ const deleteWorkout = async (req, res) => {
     // in mongoDB id key = _id
     const workout = await Workout.findOneAndDelete({ _id: id });
 
-    if (workout) {
-        res.status(404).json({ error: "No such workout" });
+    if (!workout) {
+        return res.status(404).json({ error: "No such workout" });
     }
 
     res.status(200).json(workout);
 };
 
 // update workout
-//FIXME: work but generate an error
 const updateWorkout = async (req, res) => {
     const { id } = req.params;
 
@@ -72,8 +70,8 @@ const updateWorkout = async (req, res) => {
     const workout = await Workout.findOneAndUpdate({ _id: id }, {
         ...req.body
     });
-    if (workout) {
-        res.status(404).json({ error: "No such workout" });
+    if (!workout) {
+        return res.status(404).json({ error: "No such workout" });
     }
 
     res.status(200).json(workout);
